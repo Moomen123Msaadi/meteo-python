@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Weather Data — Tunisia 2024{% endblock %}
+{% block content %}
+
+<section class="page-header">
+    <h1>Weather Data</h1>
+    <p>{{ filtered_count }} of {{ summary.count }} records</p>
+</section>
+
+<form class="filters" method="get">
+    <label>Governorate
+        <select name="governorate">
+            <option value="all">All</option>
+            {% for g in summary.governorates %}
+                <option value="{{ g }}" {% if selected.governorate == g %}selected{% endif %}>{{ g }}</option>
+            {% endfor %}
+        </select>
+    </label>
+    <label>Season
+        <select name="season">
+            <option value="all">All</option>
+            {% for s in summary.seasons %}
+                <option value="{{ s }}" {% if selected.season == s %}selected{% endif %}>{{ s }}</option>
+            {% endfor %}
+        </select>
+    </label>
+    <label>Month
+        <select name="month">
+            <option value="all">All</option>
+            {% for m in summary.months %}
+                <option value="{{ m }}" {% if selected.month == m %}selected{% endif %}>{{ m }}</option>
+            {% endfor %}
+        </select>
+    </label>
+    <button type="submit" class="btn btn-primary">Apply</button>
+    <a href="{{ url_for('weather') }}" class="btn btn-ghost">Reset</a>
+</form>
+
+<div class="table-wrap">
+    <table class="weather-table">
+        <thead>
+            <tr>
+                <th>Governorate</th>
+                <th>Date</th>
+                <th>Day</th>
+                <th>Season</th>
+                <th>Temp (°C)</th>
+                <th>Humidity (%)</th>
+                <th>Wind (km/h)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in page_rows %}
+            <tr>
+                <td>{{ r.governorate }}</td>
+                <td>{{ r.date }}</td>
+                <td>{{ r.dayOfWeek }}</td>
+                <td><span class="badge badge-{{ r.season|lower }}">{{ r.season }}</span></td>
+                <td class="temp">{{ r.temperature_C }}°</td>
+                <td>{{ r.humidity_percent }}</td>
+                <td>{{ r.wind_kmh }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="7" class="empty">No records match your filters.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% if total_pages > 1 %}
+{% set sep = '&' if query_string else '' %}
+<nav class="pagination">
+    {% if page > 1 %}
+        <a href="?{{ query_string }}{{ sep }}page={{ page - 1 }}" class="btn btn-ghost">← Prev</a>
+    {% endif %}
+    <span>Page {{ page }} of {{ total_pages }}</span>
+    {% if page < total_pages %}
+        <a href="?{{ query_string }}{{ sep }}page={{ page + 1 }}" class="btn btn-ghost">Next →</a>
+    {% endif %}
+</nav>
+{% endif %}
+
+{% endblock %}

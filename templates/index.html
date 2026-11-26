@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="hero">
+    <h1>Welcome to Tunisia Weather 2024</h1>
+    <p class="hero-sub">
+        Explore a full year of daily weather observations across Tunisia —
+        temperature, humidity, and wind, organized and ready to browse.
+    </p>
+    <a href="{{ url_for('weather') }}" class="btn btn-primary">Explore the Data →</a>
+</section>
+
+<section class="stats">
+    <div class="stat-card">
+        <span class="stat-value">{{ summary.count }}</span>
+        <span class="stat-label">Daily Records</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-value">{{ summary.governorates|length }}</span>
+        <span class="stat-label">Governorates</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-value">{{ summary.avg_temp }}°C</span>
+        <span class="stat-label">Avg Temperature</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-value">{{ summary.max_temp }}°C</span>
+        <span class="stat-label">Hottest Day</span>
+    </div>
+</section>
+
+<section class="highlights">
+    <div class="highlight highlight-hot">
+        <h3>🔥 Hottest Day</h3>
+        <p class="hl-temp">{{ summary.hottest.temperature_C }}°C</p>
+        <p class="hl-meta">{{ summary.hottest.governorate }} — {{ summary.hottest.date }}</p>
+    </div>
+    <div class="highlight highlight-cold">
+        <h3>❄️ Coldest Day</h3>
+        <p class="hl-temp">{{ summary.coldest.temperature_C }}°C</p>
+        <p class="hl-meta">{{ summary.coldest.governorate }} — {{ summary.coldest.date }}</p>
+    </div>
+    <div class="highlight highlight-range">
+        <h3>📅 Coverage</h3>
+        <p class="hl-temp">{{ summary.date_from }} → {{ summary.date_to }}</p>
+        <p class="hl-meta">Full 2024 season cycle</p>
+    </div>
+</section>
+
+{% endblock %}
